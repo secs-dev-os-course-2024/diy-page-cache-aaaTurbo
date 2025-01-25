@@ -1,16 +1,20 @@
-cmake_minimum_required(VERSION 3.12)
-project(app
-        VERSION 0.0.0
-        DESCRIPTION "Application module"
-        LANGUAGES C CXX
-)
+cmake_minimum_required(VERSION 3.10)
 
-cmake_policy(SET CMP0076 NEW) # avoid warning of relative paths translation
+# Имя проекта
+project(BlockCache)
 
-add_executable(app)
-target_include_directories(app PRIVATE ${CMAKE_SOURCE_DIR})
+# Стандарт C++
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-target_sources(app
-        PRIVATE
-        app.c # or app.cpp
-)
+# Установка пути для поиска заголовочных файлов
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
+# Создание динамической библиотеки для блочного кэша
+add_library(block_cache SHARED BlockCache.cpp api.cpp)
+
+# Исполняемый файл для поиска
+add_executable(ema_search_int ema_search_int.cpp)
+
+# Линковка исполняемых файлов с библиотекой блочного кэша
+target_link_libraries(ema_search_int block_cache)
